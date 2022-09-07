@@ -6,6 +6,7 @@ import 'package:saheefa/model/Posts/LatestPostsModel.dart';
 import 'package:saheefa/model/Posts/MostSeenPostsModel.dart';
 import 'package:saheefa/model/Posts/SinglePostModel.dart';
 import 'package:saheefa/services/post_services/latest_posts_services.dart';
+import 'package:html/parser.dart';
 
 class HomeController extends GetxController {
   final _servicesLatestPostsServices = LatestPostsServices();
@@ -20,6 +21,7 @@ class HomeController extends GetxController {
   final value = 0.obs;
   final time = ''.obs;
   final id = 0.obs;
+  final content = ''.obs;
 
   selectCategory(int index) {
     value.value = index;
@@ -31,22 +33,24 @@ class HomeController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     loading.value = true;
+    loadingCategory.value = false;
+
     mostSeenPostsModel = await _servicesLatestPostsServices.getMostSeenPosts();
     latestPostsModel = await _servicesLatestPostsServices.getLatestPosts();
     allCategoryModel = await _servicesLatestPostsServices.getAllCategory();
-    id.value = allCategoryModel.data.first.termId;
-    singleCategoryModel =
-        await _servicesLatestPostsServices.getOnSingleCat(id.value);
+    // singleCategoryModel = await _servicesLatestPostsServices
+    //     .getOnSingleCat(allCategoryModel.data[0].termId);
+    // print(allCategoryModel.data[0].termId);
     convertTime();
     print("MostSeenPostsModel");
     loading.value = false;
+    loadingCategory.value = true;
   }
 
-  String removeAllHtmlTags(String htmlText) {
-    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-    String result = htmlText.replaceAll(exp, '');
-    print(result);
-    return result;
+  String parseHtmlString(int index) {
+    final document = parse(latestPostsModel.data[index].postContent);
+    content.value = parse(document.body.text).documentElement.text;
+    return content.value;
   }
 
   convertTime() {
@@ -61,9 +65,8 @@ class HomeController extends GetxController {
   }
 
   getCategory(int id) async {
-    loadingCategory.value = true;
-    singleCategoryModel =
-        await _servicesLatestPostsServices.getOnSingleCat(id);
     loadingCategory.value = false;
+    singleCategoryModel = await _servicesLatestPostsServices.getOnSingleCat(id);
+    loadingCategory.value = true;
   }
 }
