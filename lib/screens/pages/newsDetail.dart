@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:html/parser.dart';
 import 'package:saheefa/model/Posts/SinglePostModel.dart';
 import 'package:saheefa/util/mycolor.dart';
 import 'package:saheefa/widget/load_image.dart';
@@ -17,6 +18,8 @@ class NewsDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final document = parse(singlePostModel.data.postContent);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -86,7 +89,7 @@ class NewsDetails extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(singlePostModel.data.postContent),
+              Text(parse(document.body.text).documentElement.text),
             ],
           ),
         ),

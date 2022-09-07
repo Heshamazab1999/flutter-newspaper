@@ -33,6 +33,9 @@ dependencies:
   cached_network_image: ^3.2.0
   intl:
   auto_size_text:
+  flutter_staggered_grid_view: ^0.6.2
+  html:
+  tiktoklikescroller: ^0.2.3
   dio:
   flutter:
     sdk: flutter
@@ -71,9 +74,9 @@ flutter:
     - images/twitter.svg
     - images/facebook.svg
     - images/share.svg
- 
-  
-     
+
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -91,14 +94,14 @@ flutter:
       fonts:
         - asset: icons/Facebook.ttf
 
-    - family:  Twitter
+    - family: Twitter
       fonts:
         - asset: icons/Twitter.ttf
-    - family:  Google
+    - family: Google
       fonts:
         - asset: icons/Google.ttf
-   #         style: italic
-    - family: cairo        
+    #         style: italic
+    - family: cairo
       fonts:
         - asset: fonts/Cairo-SemiBold.ttf
         - asset: fonts/Cairo-Regular.ttf

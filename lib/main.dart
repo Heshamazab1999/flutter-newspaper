@@ -5,6 +5,7 @@ import 'package:saheefa/controller_binding/view_model_binding.dart';
 import 'package:saheefa/helper/cache_helper.dart';
 import 'package:saheefa/helper/dio_integration.dart';
 import 'package:saheefa/screens/home.dart';
+import 'package:saheefa/screens/home/home.dart';
 import 'package:saheefa/screens/registration.dart';
 
  import 'package:saheefa/util/mycolor.dart';
@@ -72,7 +73,7 @@ final token =CacheHelper.getData(key: 'token');
           bodyText1: TextStyle(fontSize: 15.0, fontFamily: "cairo"),
         ),
       ),
-      home:token==null? OnBoardingPage():Home(),
+      home:token==null? OnBoardingPage():HomeScreen(),
     );
   }
 }

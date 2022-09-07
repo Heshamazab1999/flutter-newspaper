@@ -34,64 +34,75 @@ class Home extends StatelessWidget {
                         children: [
                           Search(),
                           SizedBox(height: 10.0),
-                          SizedBox(
-                            height: 55,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount:
-                                    controller.allCategoryModel.data.length,
-                                itemBuilder: (ctx, index) =>
-                                    Obx(() => BuildCategoryListItem(
-                                          onTap: () async {
-                                            controller.selectCategory(index);
-                                            controller.getCategory( controller
-                                                .allCategoryModel
-                                                .data[index]
-                                                .termId);
-                                          },
-                                          name: controller.allCategoryModel
-                                              .data[index].name,
-                                          color: controller.value.value == index
-                                              ? mycolor.blue
-                                              : mycolor.white,
-                                          colorText:
-                                              controller.value.value == index
-                                                  ? mycolor.white
-                                                  : Colors.black,
-                                        ))),
-                          ),
-                          SizedBox(height: 20.0),
-                          Obx(() => controller.loadingCategory.value
-                              ? Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : SizedBox(
-                                  height: 200,
-                                  child: ListView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: controller
-                                        .singleCategoryModel.data.posts.length,
-                                    itemBuilder: (ctx, index) => Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: BuildBanner(
-                                        title: controller.singleCategoryModel
-                                            .data.posts[index].id.toString(),
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                          SizedBox(height: 10.0),
-                          Obx(() => Text(
-                                controller.time.value,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .copyWith(color: mycolor.red),
-                              )),
+                          // SizedBox(
+                          //   height: 55,
+                          //   child: ListView.builder(
+                          //       scrollDirection: Axis.horizontal,
+                          //       physics: BouncingScrollPhysics(),
+                          //       shrinkWrap: true,
+                          //       itemCount:
+                          //           controller.allCategoryModel.data.length,
+                          //       itemBuilder: (ctx, index) =>
+                          //           Obx(() => BuildCategoryListItem(
+                          //                 onTap: () async {
+                          //                   controller.selectCategory(index);
+                          //                   controller.getCategory(controller
+                          //                       .allCategoryModel
+                          //                       .data[index]
+                          //                       .termId);
+                          //                 },
+                          //                 name: controller.allCategoryModel
+                          //                     .data[index].name,
+                          //                 color: controller.value.value == index
+                          //                     ? mycolor.blue
+                          //                     : mycolor.white,
+                          //                 colorText:
+                          //                     controller.value.value == index
+                          //                         ? mycolor.white
+                          //                         : Colors.black,
+                          //               ))),
+                          // ),
+                          // SizedBox(height: 20.0),
+                          // Obx(() => controller.loadingCategory.value == false
+                          //     ? Center(
+                          //         child: CircularProgressIndicator(),
+                          //       )
+                          //     : controller
+                          //             .singleCategoryModel.data.posts.isEmpty
+                          //         ? Center(
+                          //             child: Text("Select a category"),
+                          //           )
+                          //         : SizedBox(
+                          //             height: 200,
+                          //             child: ListView.builder(
+                          //               physics: BouncingScrollPhysics(),
+                          //               scrollDirection: Axis.horizontal,
+                          //               shrinkWrap: true,
+                          //               itemCount: controller
+                          //                   .singleCategoryModel
+                          //                   .data
+                          //                   .posts
+                          //                   .length,
+                          //               itemBuilder: (ctx, index) => Padding(
+                          //                 padding: const EdgeInsets.all(8.0),
+                          //                 child: BuildBanner(
+                          //                   title: controller
+                          //                       .singleCategoryModel
+                          //                       .data
+                          //                       .posts[index]
+                          //                       .id
+                          //                       .toString(),
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           )),
+                          // Obx(() => Text(
+                          //       controller.time.value,
+                          //       style: Theme.of(context)
+                          //           .textTheme
+                          //           .bodyText1
+                          //           .copyWith(color: mycolor.red),
+                          //     )),
                           Text(
                             "Most Seen",
                             style: Theme.of(context)
@@ -112,6 +123,7 @@ class Home extends StatelessWidget {
                             physics: BouncingScrollPhysics(),
                             itemCount: controller.latestPostsModel.data.length,
                             itemBuilder: (context, index) {
+                              controller.parseHtmlString(index);
                               var inputDateFrom = DateTime.parse(controller
                                   .latestPostsModel.data[index].postDate);
 
@@ -170,9 +182,7 @@ class Home extends StatelessWidget {
                                                           color: mycolor.red),
                                                 ),
                                                 AutoSizeText(
-                                                  controller.latestPostsModel
-                                                      .data[index].postContent
-                                                      .trim(),
+                                                  controller.content.value,
                                                   maxLines: 3,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -200,8 +210,6 @@ class Home extends StatelessWidget {
       );
     });
   }
-
-  buildBanner() => BuildBanner();
 }
 
 class Search extends StatelessWidget {

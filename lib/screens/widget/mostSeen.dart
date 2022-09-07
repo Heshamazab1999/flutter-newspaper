@@ -18,6 +18,7 @@ class MostSeen extends StatelessWidget {
     return SizedBox(
         height: 200,
         child: ListView.builder(
+          padding: EdgeInsets.zero,
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemCount: mostSeenPostsModel.data.length,
