@@ -4,6 +4,7 @@ import 'package:saheefa/controller/Home/home_controller.dart';
 import 'package:saheefa/controller/Posts_controller/latest_posts_controller.dart';
 import 'package:saheefa/controller/base_controller.dart';
 import 'package:saheefa/controller/category_controller.dart';
+import 'package:saheefa/controller/profile_controller.dart';
 import 'package:saheefa/helper/connection.dart';
 
 class ViewModelBinding extends Bindings {
@@ -13,6 +14,7 @@ class ViewModelBinding extends Bindings {
     Get.lazyPut<BaseController>(() => BaseController(), fenix: true);
     Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
     Get.lazyPut<HomeController>(() => HomeController(), fenix: true);
+    Get.lazyPut<ProfileController>(() => ProfileController(), fenix: true);
     Get.lazyPut<CategoriesController>(() => CategoriesController(),
         fenix: true);
     // Get.lazyPut<BmiController>(() => BmiController(), fenix: true);

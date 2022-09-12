@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
+import 'package:readmore/readmore.dart';
 import 'package:saheefa/model/Categories/SingleCategoryNodel.dart';
-import 'package:tiktoklikescroller/tiktoklikescroller.dart';
+import 'package:saheefa/util/mycolor.dart';
+import 'package:intl/intl.dart' as intl;
 
 class CategoryDetails extends StatelessWidget {
   final SingleCategoryModel singleCategoryModel;
@@ -10,41 +12,63 @@ class CategoryDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Controller controller = Controller()
-      ..addListener((event) {
-        _handleCallbackEvent(event.direction, event.success);
-      });
-    return TikTokStyleFullPageScroller(
-      contentSize: singleCategoryModel.data.posts.length,
+    return Scaffold(
+      body: ListView.builder(
+          itemCount: 4,
+          physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (ctx, index) {
+            var inputDateFrom =
+                DateTime.parse(singleCategoryModel.data.posts[index].postDate);
 
-      swipePositionThreshold: 0.2,
-      // ^ the fraction of the screen needed to scroll
-      swipeVelocityThreshold: 2000,
-      // ^ the velocity threshold for smaller scrolls
-      animationDuration: const Duration(milliseconds: 400),
-      // ^ how long the animation will take
-      controller: controller,
-      // ^ registering our own function to listen to page changes
-      builder: (BuildContext context, int index) {
-        final document =
-            parse(singleCategoryModel.data.posts[index].postContent);
+            var time = intl.DateFormat('hh:mm a').format(inputDateFrom);
+            var date = intl.DateFormat.yMMMMEEEEd().format(inputDateFrom);
+            print(time);
+            final document =
+                parse(singleCategoryModel.data.posts[index].postContent);
+            final documentTitle =
+                parse(singleCategoryModel.data.posts[index].postTitle);
 
-        return Container(
-          color: Colors.blue,
-          child: Center(
-            child: Text(
-              parse(document.body.text).documentElement.text,
-              style: const TextStyle(fontSize: 12, color: Colors.white),
-            ),
-          ),
-        );
-      },
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Card(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                          parse(documentTitle.body.text).documentElement.text,
+                          style: TextStyle(
+                            color: mycolor.red,
+                          ),
+                          maxLines: 1),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ReadMoreText(
+                        parse(document.body.text).documentElement.text.trim(),
+                        trimLines: 3,
+                        colorClickableText: Colors.pink,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: 'Show more',
+                        trimExpandedText: 'Show less',
+                        textDirection: TextDirection.rtl,
+                        lessStyle: TextStyle(
+                            color: mycolor.blue,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                        moreStyle: TextStyle(
+                            color: mycolor.red,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(time + date),
+                  ],
+                ),
+              ),
+            );
+          }),
     );
-  }
-
-  void _handleCallbackEvent(ScrollDirection direction, ScrollSuccess success,
-      {int currentIndex}) {
-    print(
-        "Scroll callback received with data: {direction: $direction, success: $success and index: ${currentIndex ?? 'not given'}}");
   }
 }
